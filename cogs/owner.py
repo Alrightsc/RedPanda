@@ -22,7 +22,7 @@ extensions = ['cogs.members',
               'cogs.admin',
               'cogs.owner']
 
-class Admin:
+class Owner:
     def __init__(self, bot):
         self.bot = bot
     
@@ -173,4 +173,4 @@ class Admin:
         await ctx.send(content=None, embed=embed)
 
 def setup(bot):
-    bot.add_cog(Admin(bot))
+    bot.add_cog(Owner(bot))
