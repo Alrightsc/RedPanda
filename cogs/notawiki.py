@@ -6,9 +6,9 @@ from urlextract import URLExtract
 import discord
 import requests
 
-badSubstrings = ["", "Cost", "Effect", "Formula", "Mercenary Template", "Requirement"]
+badSubstrings = ["", "Cost", "Effect", "Formula", "Mercenary Template", "Requirement", "Gem Grinder and Dragon's Breath Formula"]
 
-def format(list: list):
+def format(list: list, factionUpgrade):
     """Formats the list retrieved from BeautifulSoup"""
 
     # First line always return an url - we want to get the URL only for the thumbnail
@@ -20,17 +20,20 @@ def format(list: list):
     list.remove(url)
     list.insert(0, newUrl[0])
 
-    # Not-a-Wiki always begin with a space in the upgrade name, so we strip it
-    list[1] = list[1].strip()
+    # We add the faction upgrade name to the list so embed can refer to this
+    list.insert(1, factionUpgrade)
 
-    # Since BeautifulSoup returns each line per tag <>, we just get rid of these using the badSubstrings above
-    for x in range(len(list)):
-        for line in list[1:x]:
-            if line in badSubstrings:
-                list.remove(line)
+    # For 10-12 upgrades, we want Cost to be first after Requirement, to look nice in Embed
+    if list[3].startswith('Requirement'):
+        old = list[3]
+        new = list[4]
+        list[3] = new
+        list[4] = old
 
-            if line.startswith("Note"):
-                list.remove(line)
+    # Cleanup in case bad stuff goes through somehow
+    for line in list[3:]:
+        if line in badSubstrings:
+            list.remove(line)
 
     return list
 
@@ -59,9 +62,9 @@ def factionUpgradeSearch(faction):
 
             # Since we return true, we search using find_all_next function, and then break it there since we don't
             # need to iterate anymore at the end
-            for line in tag.find_all_next():
+            for line in tag.find_all_next(['p','br','hr','div']):
                 # Not-a-Wiki stops lines after a break, a new line, or div, so we know the upgrade info stop there
-                if str(line) == "<br/>" or str(line) == "<hr/>" or str(line) == "</div>":
+                if str(line) == "<br/>" or str(line) == "<hr/>" or str(line).startswith("<div"):
                     break
                 else:
                     # Otherwise, add the lines of upgrade to the list - line.text returns the text without HTML tags
@@ -69,7 +72,4 @@ def factionUpgradeSearch(faction):
             break
 
     # Then we run the list through a formatter, and that becomes our new list
-    return format(screen)
-
-
-print(factionUpgradeSearch("EL10"))
+    return format(screen, factionUpgrade)

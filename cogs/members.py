@@ -130,9 +130,13 @@ class Members:
     async def upgrade(self, ctx, arg, number=None):
         """Searches a Faction Upgrade from Not-a-Wiki"""
         faction = ""
-        if len(arg) == 3 and arg[2].isdigit() and number is None:
+        if len(arg) == 3 and arg[-1].isdigit() and number is None:
             faction = arg
             arg = arg[:-1]
+            color = FactionUpgrades.getFactionColour(arg)
+        elif len(arg) == 4 and arg[-1].isdigit():
+            faction = arg
+            arg = arg[:-2]
             color = FactionUpgrades.getFactionColour(arg)
         elif number is not None:
             arg2 = arg.lower()
@@ -146,14 +150,11 @@ class Members:
         async with ctx.channel.typing():
             data = notawiki.factionUpgradeSearch(faction)
 
-            print(data)
-            print(len(data))
             thumbnail = data[0]
             title = f'**{data[1]}**'
             embed = discord.Embed(title=title, colour=discord.Colour(color))
             embed.set_thumbnail(url=thumbnail)
-            embed.add_field(name="**Mercenary Template: **", value=data[2], inline=True)
-            for line in data[3:len(data)]:
+            for line in data[2:]:
                 newline = line.split(": ")
                 first = f'**{newline[0]}**'
                 embed.add_field(name=first, value=newline[1], inline=True)
