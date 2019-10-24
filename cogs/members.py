@@ -6,6 +6,7 @@ import discord
 import random
 import datetime
 
+
 class Members:
     def __init__(self, bot):
         self.bot = bot
@@ -19,7 +20,7 @@ class Members:
         await ctx.send(f'{member.display_name} joined on {member.joined_at}.')
 
     @commands.command()
-    async def resolve(self, ctx, *, member: discord.Member=None):
+    async def resolve(self, ctx, *, member: discord.Member = None):
         """Checks how strong a member's resolve is."""
         answer = ['Vigorous!', 'Powerful!', 'Abusive!', 'Irrational!', 'Hopeless!', 'Paranoid!',
                   'Fearful!', 'Selfish!', 'Masochistic!', 'Rapturous!', 'Refracted!', 'Courageous!',
@@ -29,10 +30,9 @@ class Members:
         embed = discord.Embed(title='{0}\'s resolve is tested...'.format(member.display_name),
                               colour=discord.Colour.dark_blue())
         embed.description = random.choice(answer)
-        #await ctx.send(member.display_name + '\'s resolve is tested...')
-        #await ctx.send(random.choice(answer))
+        # await ctx.send(member.display_name + '\'s resolve is tested...')
+        # await ctx.send(random.choice(answer))
         await ctx.send(embed=embed)
-
 
     @commands.command()
     async def pounce(self, ctx, member: discord.Member = None):
@@ -44,8 +44,8 @@ class Members:
             return await ctx.send('There\'s nobody to pounce :(')
 
         pandaImage = Utilities.getPounceImage()
-        embed = discord.Embed(title='{0} just pounced {1}!'.format(ctx.author.display_name, member.display_name),
-                                  color=discord.Color.red())
+        embed = discord.Embed(title=f'{ctx.author.display_name} just pounced {member.display_name}!',
+                              colour=discord.Colour.red())
         embed.set_image(url='https://i.imgur.com/' + pandaImage + '.gif')
         await ctx.send(embed=embed)
 
@@ -58,7 +58,7 @@ class Members:
     @commands.guild_only()
     async def fact(self, ctx):
         """Cute panda facts!"""
-        roll = random.randint(1,100)
+        roll = random.randint(1, 100)
         if roll > 5:
             fact = Utilities.getpandaFact()
         else:
@@ -67,7 +67,7 @@ class Members:
         await ctx.send(fact)
 
     @commands.command()
-    async def roll(self, ctx, roll : str):
+    async def roll(self, ctx, roll: str):
         """Rolls a dice or more using #d# format."""
         resultTotal = 0
         resultString = ''
@@ -78,7 +78,8 @@ class Members:
                 diceVal = roll.split('d')[1]
             except Exception as e:
                 print(e)
-                await ctx.send(f'Aw, this format looks awfully wrong! It needs to be in # d #, {ctx.author.display_name}.')
+                await ctx.send(
+                    f'Aw, this format looks awfully wrong! It needs to be in # d #, {ctx.author.display_name}.')
                 return
 
             if int(numDice) > 500:
@@ -101,18 +102,20 @@ class Members:
                 if numDice == '1':
                     await ctx.send(ctx.author.mention + ' :game_die:\n**Result:** ' + resultString)
                 else:
-                    await ctx.send(ctx.author.mention + ':game_die:\n**Result:** ' + resultString + '\n**Total:** ' + str(resultTotal))
+                    await ctx.send(
+                        ctx.author.mention + ':game_die:\n**Result:** ' + resultString + '\n**Total:** ' + str(
+                            resultTotal))
 
         except Exception as e:
             print(e)
             return
 
-
     @roll.error
     async def roll_error(self, ctx, error):
         if isinstance(error, commands.MissingRequiredArgument):
             t = ':game_die: Roll'
-            desc = '**panda roll #d#**\n\nRolls a dice or more using #d#, where first # is the number on dice and second # is how many rolls.'
+            desc = '**panda roll #d#**\n\nRolls a dice or more using #d#, where first # is the number on dice and ' \
+                   'second # is how many rolls. '
             embed = discord.Embed(title=t, description=desc, color=discord.Color.red())
             await ctx.send(embed=embed)
 
@@ -130,7 +133,9 @@ class Members:
     @commands.guild_only()
     async def upgrade(self, ctx, arg, number=None):
         """Searches a Faction Upgrade from Not-a-Wiki"""
-        faction = ""
+        global color
+        global faction
+
         if len(arg) == 3 and arg[-1].isdigit() and number is None:
             lower = arg.lower()
             faction = lower.upper()
@@ -155,7 +160,8 @@ class Members:
             thumbnail = data[0]
             title = f'**{data[1]}**'
             embed = discord.Embed(title=title, colour=discord.Colour(color), timestamp=datetime.datetime.utcnow())
-            embed.set_footer(text="http://musicfamily.org/realm/FactionUpgrades/", icon_url="http://musicfamily.org/realm/Factions/picks/RealmGrinderGameRL.png")
+            embed.set_footer(text="http://musicfamily.org/realm/FactionUpgrades/",
+                             icon_url="http://musicfamily.org/realm/Factions/picks/RealmGrinderGameRL.png")
             embed.set_thumbnail(url=thumbnail)
             for line in data[2:]:
                 newline = line.split(": ")
@@ -163,6 +169,7 @@ class Members:
                 embed.add_field(name=first, value=newline[1], inline=True)
 
         await ctx.send(embed=embed)
+
     '''
     Old code for previous stuff, archiving
     @commands.command()
@@ -199,6 +206,8 @@ class Members:
             await ctx.send(f"Added {testRole.name}!")
         
     '''
+
+
 #########
 def setup(bot):
     bot.add_cog(Members(bot))

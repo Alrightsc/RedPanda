@@ -1,46 +1,47 @@
 from discord.ext import commands
 from cogs.utils import Checks, Utilities, FactionUpgrades
-from bs4 import BeautifulSoup, NavigableString
+from bs4 import BeautifulSoup
 from urlextract import URLExtract
 
 import datetime
 import discord
 import requests
 
-badSubstrings = ["", "Cost", "Effect", "Formula", "Mercenary Template", "Requirement", "Gem Grinder and Dragon's Breath Formula"]
+badSubstrings = ["", "Cost", "Effect", "Formula", "Mercenary Template", "Requirement", "Gem Grinder and Dragon's "
+                                                                                       "Breath Formula"]
 
-def format(list: list, factionUpgrade):
+def format(lst: list, factionUpgrade):
     """Formats the list retrieved from BeautifulSoup"""
 
     # First line always return an url - we want to get the URL only for the thumbnail
-    url = list[0]
+    url = lst[0]
     extractor = URLExtract()
     newUrl = extractor.find_urls(url)
 
     # We remove the line from list and replace with the new url
-    list.remove(url)
-    list.insert(0, newUrl[0])
+    lst.remove(url)
+    lst.insert(0, newUrl[0])
 
     # We add the faction upgrade name to the list so embed can refer to this
-    list.insert(1, factionUpgrade)
+    lst.insert(1, factionUpgrade)
 
     # For 10-12 upgrades, we want Cost to be first after Requirement, to look nice in Embed
-    if list[3].startswith('Requirement'):
-        old = list[3]
-        new = list[4]
-        list[3] = new
-        list[4] = old
+    if lst[3].startswith('Requirement'):
+        old = lst[3]
+        new = lst[4]
+        lst[3] = new
+        lst[4] = old
 
     # Cleanup in case bad stuff goes through somehow
-    for line in list[3:]:
+    for line in lst[3:]:
         if line in badSubstrings:
-            list.remove(line)
+            lst.remove(line)
 
         # Notes are not really important for the embed
         if line.startswith("Note"):
-            list.remove(line)
+            lst.remove(line)
 
-    # A little extra for Djinn 8 - show current UTC time
+    # A little extra for Djinn 8 - show current UTC time and odd/even day
     if factionUpgrade == "Flashy Storm":
         utc_dt = datetime.datetime.utcnow()
         day = int(utc_dt.strftime("%d"))
@@ -50,10 +51,9 @@ def format(list: list, factionUpgrade):
         elif day % 2 == 1:
             dj8 = ", Even-tier Day"
 
-        list.append(f'Current Time (UTC): {utc_dt.strftime("%H:%M")}' + dj8)
+        lst.append(f'Current Time (UTC): {utc_dt.strftime("%H:%M")}' + dj8)
 
-
-    return list
+    return lst
 
 
 def factionUpgradeSearch(faction):
