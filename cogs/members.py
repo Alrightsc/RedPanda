@@ -131,17 +131,12 @@ class Members(commands.Cog):
     async def upgrade(self, ctx, arg, number=None):
         """Searches a Faction Upgrade from Not-a-Wiki"""
         faction = ""
-        # For abbreviated, single digit inputs e.g. FR7
-        if len(arg) == 3 and arg[-1].isdigit() and number is None:
-            lower = arg.lower()
-            faction = lower.upper()
-            argColor = faction[:-1]
-            color = FactionUpgrades.getFactionColour(argColor)
-        # For abbreviated, double digit inputs e.g. MK11
-        elif len(arg) == 4 and arg[-1].isdigit():
+        # For abbreviated inputs e.g. FR7 or MK11
+        if arg[2].isdigit() and number is None:
             faction = arg.upper()
-            arg = arg[:-2]
-            color = FactionUpgrades.getFactionColour(arg.upper())
+            argColor = faction[0:2]
+            number = faction[2:]
+            color = FactionUpgrades.getFactionColour(argColor)
         # For inputs using the full faction name e.g. Titan 5
         elif number is not None:
             arg2 = arg.lower()
@@ -151,6 +146,13 @@ class Members(commands.Cog):
                 return await ctx.send(f'{checks},{fac},{color}')
             else:
                 faction = fac + number
+        else:
+            return await ctx.send("Your input is insufficient, please try again.")
+
+        # Check to make sure the number isn't bogus
+        if number.isdigit():
+            if int(number) > 12:
+                return await ctx.send("you uhhhh cant do that. Sorry.")
 
         async with ctx.channel.typing():
             data = notawiki.factionUpgradeSearch(faction)
