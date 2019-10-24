@@ -33,7 +33,7 @@ class RedPanda(commands.AutoShardedBot):
             self.uptime = datetime.datetime.utcnow()
         await self.change_presence(status=discord.Status.online, activity=discord.Game('I\'m a red flower!'))
 
-        print(f'mopemope be like {self.user} (ID: {self.user.id})')
+        print(f'mopemope be like sometimes {self.user} (ID: {self.user.id})')
 
     """
     async def on_member_join(self, member):
