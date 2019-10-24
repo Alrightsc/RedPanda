@@ -5,7 +5,7 @@ from cogs import notawiki
 import discord
 import random
 
-class Members:
+class Members(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
