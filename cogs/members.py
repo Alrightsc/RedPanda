@@ -127,7 +127,7 @@ class Members:
 
     @commands.command(aliases=["upg", "u", "up"])
     @commands.guild_only()
-    async def upgrade(self, ctx, arg, *, number=None):
+    async def upgrade(self, ctx, arg, number=None):
         """Searches a Faction Upgrade from Not-a-Wiki"""
         faction = ""
         if len(arg) == 3 and arg[2].isdigit() and number is None:
@@ -135,10 +135,11 @@ class Members:
             arg = arg[:-1]
             color = FactionUpgrades.getFactionColour(arg)
         elif number is not None:
-            arg = arg.lower()
-            checks, fac, color = FactionUpgrades.getFactionAbbr(arg.capitalize())
+            arg2 = arg.lower()
+            arg2 = arg2.capitalize()
+            checks, fac, color = FactionUpgrades.getFactionAbbr(arg2)
             if checks is False:
-                return await ctx.send('error')
+                return await ctx.send(f'{checks},{fac},{color}')
             else:
                 faction = fac + number
 

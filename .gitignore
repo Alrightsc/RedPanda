@@ -123,3 +123,5 @@ dmypy.json
 .pyre/
 cogs/config.py
 cogs/utils/__init__.py
+*.xml
+.idea/RedPanda.iml

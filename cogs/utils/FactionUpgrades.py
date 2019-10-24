@@ -1,4 +1,5 @@
 factionAbbrDict = {
+    # Comparisons for full and abbreviation factions, also colors will be checked in here
     "Fairy": ["FR", 0xff99ff],
     "Elf": ["EL", 0x33cc33],
     "Angel": ["AN", 0x99ccff],
@@ -8,16 +9,16 @@ factionAbbrDict = {
     "Titan": ["TT", 0xffd966],
     "Druid": ["DD", 0x833c0c],
     "Faceless": ["FC", 0x6432c7],
-    "Dwarf": ["DN",0x2828c6],
+    "Dwarf": ["DN", 0x2828c6],
     "Drow": ["DW", 0x840058],
     "Dragon": ["DG", 0x27af27],
-    "Archon": ["AR",0xc5dff8],
+    "Archon": ["AR", 0xc5dff8],
     "Djinn": ["DJ", 0xa78bd9],
     "Makers": ["MK", 0xf0f0f0]
 }
 
 factionUpgradesDict = {
-    #Fairy
+    # Fairy
     "FR1": "Pixie Dust Fertilizer",
     "FR2": "Fairy Cuisine",
     "FR3": "Starmetal Alloys",
@@ -31,7 +32,7 @@ factionUpgradesDict = {
     "FR11": "Pheromones",
     "FR12": "Dream Catchers",
 
-    #Elf
+    # Elf
     "EL1": "Elven Mint",
     "EL2": "Elven Treasure Casing",
     "EL3": "Sylvan Treasure Frills",
@@ -45,7 +46,7 @@ factionUpgradesDict = {
     "EL11": "Camouflage",
     "EL12": "Elven Discipline",
 
-    #Angel
+    # Angel
     "AN1": "Holy Bells",
     "AN2": "Angelic Determination",
     "AN3": "Angel Feathers",
@@ -59,7 +60,7 @@ factionUpgradesDict = {
     "AN11": "Angelic Fortitude",
     "AN12": "Seraphim Wings",
 
-    #Goblin
+    # Goblin
     "GB1": "Strong Currency",
     "GB2": "Slave Trading",
     "GB3": "Cheap Materials",
@@ -73,7 +74,7 @@ factionUpgradesDict = {
     "GB11": "Money is Magic",
     "GB12": "Lousy Architecture",
 
-    #Undead
+    # Undead
     "UD1": "The Walking Dead",
     "UD2": "Deadened Muscles",
     "UD3": "Death Temples",
@@ -87,7 +88,7 @@ factionUpgradesDict = {
     "UD11": "Zombie Apocalypse",
     "UD12": "Eternal Servitude",
 
-    #Demon
+    # Demon
     "DM1": "Torture Chambers",
     "DM2": "Devil Tyrant",
     "DM3": "Evil Conquerors",
@@ -101,7 +102,7 @@ factionUpgradesDict = {
     "DM11": "Demonic Fury",
     "DM12": "Devastation",
 
-    #Titan
+    # Titan
     "TT1": "Colossal Forge",
     "TT2": "Charged Clicks",
     "TT3": "Oversized Legends",
@@ -115,7 +116,7 @@ factionUpgradesDict = {
     "TT11": "Titanic Authority",
     "TT12": "Colossus Kingdom",
 
-    #Druid
+    # Druid
     "DD1": "Druidic Vocabulary",
     "DD2": "Animal Companions",
     "DD3": "Natural Recycling",
@@ -129,7 +130,7 @@ factionUpgradesDict = {
     "DD11": "Lunar Cycle",
     "DD12": "Grove Farming",
 
-    #Faceless
+    # Faceless
     "FC1": "Territorial Expanse",
     "FC2": "Evolutive Mutation",
     "FC3": "Deep Memory",
@@ -143,7 +144,7 @@ factionUpgradesDict = {
     "FC11": "Forbidden Language",
     "FC12": "Dimension Door",
 
-    #Dwarf
+    # Dwarf
     "DN1": "Dwarven Ale",
     "DN2": "Expert Masonry",
     "DN3": "Mining Prodigies",
@@ -157,7 +158,7 @@ factionUpgradesDict = {
     "DN11": "Stonetalking",
     "DN12": "Refined Minerals",
 
-    #Drow
+    # Drow
     "DW1": "Underworld Tyranny",
     "DW2": "Honor Among Killers",
     "DW3": "Shadow Advance",
@@ -171,7 +172,7 @@ factionUpgradesDict = {
     "DW11": "Ancillae Obscure",
     "DW12": "Crystal Servants",
 
-    #Dragon
+    # Dragon
     "DG1": "Dragonscales",
     "DG2": "Iron Flight",
     "DG3": "Eternal Wisdom",
@@ -185,7 +186,7 @@ factionUpgradesDict = {
     "DG11": "Wyrm's Rest",
     "DG12": "Draconic Supremacy",
 
-    #Archon
+    # Archon
     "AR1": "Star Trading",
     "AR2": "Energy Recharge",
     "AR3": "Cosmic Resonance",
@@ -199,7 +200,7 @@ factionUpgradesDict = {
     "AR11": "Absolute Hierarchy",
     "AR12": "Essence Extractor",
 
-    #Djinn
+    # Djinn
     "DJ1": "The Desire Within",
     "DJ2": "Forbidden Will",
     "DJ3": "Magical Circuit",
@@ -213,7 +214,7 @@ factionUpgradesDict = {
     "DJ11": "Blue Powder",
     "DJ12": "Academic Prodigy",
 
-    #Makers
+    # Makers
     "MK1": "Hand of the Makers",
     "MK2": "Everlasting Materials",
     "MK3": "Infinite Improvements",
@@ -228,7 +229,9 @@ factionUpgradesDict = {
     "MK12": "Reality Marble"
 }
 
+
 def getFactionColour(abbr):
+    # Gets the color from dictionary if value matches abbreviation
     color = int()
     for key, value in factionAbbrDict.items():
         if value[0] == abbr:
@@ -236,13 +239,21 @@ def getFactionColour(abbr):
             break
     return color
 
+
 def getFactionAbbr(faction):
+    # Gets the faction abbreviation, returns True if found, and also the abbreviation/color, False otherwise
+    checks = False
+
     for key, value in factionAbbrDict.items():
         if key == faction:
+            checks = True
             return True, value[0], value[1]
-        else:
-            return False, None, None
+
+    if checks == False:
+        return checks, None, None
+
 
 def getFactionUpgradeName(faction):
+    # Checks the 3-letter abbreviation, returns the title of upgrade if found
     if faction in factionUpgradesDict:
         return factionUpgradesDict[faction]
