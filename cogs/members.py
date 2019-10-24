@@ -147,12 +147,12 @@ class Members(commands.Cog):
             else:
                 faction = fac + number
         else:
-            return await ctx.send("Your input is insufficient, please try again.")
+            return await ctx.send("Your input is insufficient; please try again.")
 
         # Check to make sure the number isn't bogus
         if number.isdigit():
             if int(number) > 12:
-                return await ctx.send("you uhhhh cant do that. Sorry.")
+                return await ctx.send("The upgrade number you have specified is invalid; please try again.")
 
         async with ctx.channel.typing():
             data = notawiki.factionUpgradeSearch(faction)
