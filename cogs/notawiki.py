@@ -3,6 +3,7 @@ from cogs.utils import Checks, Utilities, FactionUpgrades
 from bs4 import BeautifulSoup, NavigableString
 from urlextract import URLExtract
 
+import datetime
 import discord
 import requests
 
@@ -34,6 +35,23 @@ def format(list: list, factionUpgrade):
     for line in list[3:]:
         if line in badSubstrings:
             list.remove(line)
+
+        # Notes are not really important for the embed
+        if line.startswith("Note"):
+            list.remove(line)
+
+    # A little extra for Djinn 8 - show current UTC time
+    if factionUpgrade == "Flashy Storm":
+        utc_dt = datetime.datetime.utcnow()
+        day = int(utc_dt.strftime("%d"))
+        dj8 = ""
+        if day % 2 == 0:
+            dj8 = ", Odd-tier Day"
+        elif day % 2 == 1:
+            dj8 = ", Even-tier Day"
+
+        list.append(f'Current Time (UTC): {utc_dt.strftime("%H:%M")}' + dj8)
+
 
     return list
 
