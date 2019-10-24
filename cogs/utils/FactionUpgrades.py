@@ -257,3 +257,6 @@ def getFactionUpgradeName(faction):
     # Checks the 3-letter abbreviation, returns the title of upgrade if found
     if faction in factionUpgradesDict:
         return factionUpgradesDict[faction]
+
+
+print(getFactionAbbr("Angle"))
