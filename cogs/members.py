@@ -131,15 +131,18 @@ class Members(commands.Cog):
     async def upgrade(self, ctx, arg, number=None):
         """Searches a Faction Upgrade from Not-a-Wiki"""
         faction = ""
+        # For abbreviated, single digit inputs e.g. FR7
         if len(arg) == 3 and arg[-1].isdigit() and number is None:
             lower = arg.lower()
             faction = lower.upper()
             argColor = faction[:-1]
             color = FactionUpgrades.getFactionColour(argColor)
+        # For abbreviated, double digit inputs e.g. MK11
         elif len(arg) == 4 and arg[-1].isdigit():
             faction = arg.upper()
             arg = arg[:-2]
             color = FactionUpgrades.getFactionColour(arg.upper())
+        # For inputs using the full faction name e.g. Titan 5
         elif number is not None:
             arg2 = arg.lower()
             arg2 = arg2.capitalize()
@@ -152,6 +155,7 @@ class Members(commands.Cog):
         async with ctx.channel.typing():
             data = notawiki.factionUpgradeSearch(faction)
 
+            # Embed stuff goes here
             thumbnail = data[0]
             title = f'**{data[1]}**'
             embed = discord.Embed(title=title, colour=discord.Colour(color), timestamp=datetime.datetime.utcnow())
