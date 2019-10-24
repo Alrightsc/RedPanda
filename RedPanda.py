@@ -7,14 +7,14 @@ import sys
 import traceback
 
 
-description = 'Rawr! I\'m a Red Panda bot written by Alright#2304.\nUse either "panda" as a prefix, or ping the bot to use the commands below.\n\nFeel free to suggest any extra commands to give this bot some more love!'
+description = 'Rawr! I\'m a clone of the Red Panda bot written by Alright#2304.\nUse either "flower" or "." as a prefix, or ping the bot to use the commands below.\n\nFeel free to suggest any extra commands to give this bot some more love!'
 
 extensions = ['cogs.members',
               'cogs.admin',
               'cogs.owner']
 
 def getPrefix(bot, msg):
-    prefixes = ['panda ', 'Panda ', "."]
+    prefixes = ['flower ', 'Flower ', "."]
     return commands.when_mentioned_or(*prefixes)(bot, msg)
 
 class RedPanda(commands.AutoShardedBot):
@@ -31,9 +31,9 @@ class RedPanda(commands.AutoShardedBot):
     async def on_ready(self):
         if not hasattr(self, 'uptime'):
             self.uptime = datetime.datetime.utcnow()
-        await self.change_presence(status=discord.Status.online, activity=discord.Game('I\'m a red panda!'))
+        await self.change_presence(status=discord.Status.online, activity=discord.Game('I\'m a red flower!'))
 
-        print(f'Ready to pounce! {self.user} (ID: {self.user.id})')
+        print(f'mopemope be like {self.user} (ID: {self.user.id})')
 
     """
     async def on_member_join(self, member):
