@@ -4,6 +4,7 @@ from cogs import notawiki
 
 import discord
 import random
+import datetime
 
 class Members:
     def __init__(self, bot):
@@ -131,13 +132,14 @@ class Members:
         """Searches a Faction Upgrade from Not-a-Wiki"""
         faction = ""
         if len(arg) == 3 and arg[-1].isdigit() and number is None:
-            faction = arg
-            arg = arg[:-1]
-            color = FactionUpgrades.getFactionColour(arg)
+            lower = arg.lower()
+            faction = lower.upper()
+            argColor = faction[:-1]
+            color = FactionUpgrades.getFactionColour(argColor)
         elif len(arg) == 4 and arg[-1].isdigit():
-            faction = arg
+            faction = arg.upper()
             arg = arg[:-2]
-            color = FactionUpgrades.getFactionColour(arg)
+            color = FactionUpgrades.getFactionColour(arg.upper())
         elif number is not None:
             arg2 = arg.lower()
             arg2 = arg2.capitalize()
@@ -152,7 +154,8 @@ class Members:
 
             thumbnail = data[0]
             title = f'**{data[1]}**'
-            embed = discord.Embed(title=title, colour=discord.Colour(color))
+            embed = discord.Embed(title=title, colour=discord.Colour(color), timestamp=datetime.datetime.utcnow())
+            embed.set_footer(text="http://musicfamily.org/realm/FactionUpgrades/", icon_url="http://musicfamily.org/realm/Factions/picks/RealmGrinderGameRL.png")
             embed.set_thumbnail(url=thumbnail)
             for line in data[2:]:
                 newline = line.split(": ")

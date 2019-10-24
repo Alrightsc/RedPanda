@@ -14,7 +14,7 @@ extensions = ['cogs.members',
               'cogs.owner']
 
 def getPrefix(bot, msg):
-    prefixes = ['panda ', 'Panda ']
+    prefixes = ['panda ', 'Panda ', "."]
     return commands.when_mentioned_or(*prefixes)(bot, msg)
 
 class RedPanda(commands.AutoShardedBot):
