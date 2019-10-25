@@ -1,13 +1,11 @@
 from discord.ext import commands
-from cogs.utils import Checks, Utilities, FactionUpgrades
-from cogs import notawiki
+from cogs.utils import Checks, Utilities
 
 import discord
 import random
-import datetime
 
 
-class Members:
+class Members(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
@@ -128,79 +126,6 @@ class Members:
     @Checks.is_potatoe()
     async def potatoe(self, ctx):
         await ctx.send('I\'m a potato!')
-
-    @commands.command(aliases=["upg", "u", "up"])
-    @commands.guild_only()
-    async def upgrade(self, ctx, arg=None, number=None):
-        """Searches a Faction Upgrade from Not-a-Wiki"""
-        global color
-        global faction
-
-        if arg is None and number is None:
-            embed = discord.Embed(title=":recycle:  Upgrade", description="**.upgrade <faction>**\n**Aliases: **upg, "
-                                                                          "up, u\n\nRetrieves a Faction upgrade "
-                                                                          "information directly from Not-a-Wiki. "
-                                                                          "<faction> inputs can be using two-letter "
-                                                                          "Mercenary Template with upgrade number, "
-                                                                          "or full Faction name with an upgrade "
-                                                                          "number.\n\nExamples: Fairy 7, MK10",
-                                  colour=discord.Colour.dark_gold())
-            return await ctx.send(embed=embed)
-
-        # Checking if input returns an abbreviation faction i.e. FR7 or MK11, also accepts lowercase inputs
-        if arg[2].isdigit() and number is None:
-            faction = arg.upper()
-            argColor = faction[0:2]
-            color = FactionUpgrades.getFactionColour(argColor)
-
-        # if number is added as an input, we automatically assume the full term, i.e. "Fairy 7"
-        elif number is not None:
-            # Some people just like to watch the world burn
-            if number < 0 or number > 12:
-                raise Exception('Invalid Input')
-
-            arg2 = arg.lower()
-            arg2 = arg2.capitalize()
-            checks, fac, color = FactionUpgrades.getFactionAbbr(arg2)
-
-            # checks is retrieved from FactionUpgrades, if the term is not in dictionary it returns False and we
-            # raise Exception error
-            if checks is False:
-                raise Exception('Invalid Input')
-            else:
-                faction = fac + number
-
-        # if inputs match neither above, raise Exception
-        else:
-            raise Exception('Invalid Input')
-
-        async with ctx.channel.typing():
-            # We get our list through Not-a-Wiki Beautiful Soup search
-            data = notawiki.factionUpgradeSearch(faction)
-
-            # Embed things, using the list retrieved from factionUpgradeSearch
-            thumbnail = data[0]
-            title = f'**{data[1]}**'
-            embed = discord.Embed(title=title, colour=discord.Colour(color), timestamp=datetime.datetime.utcnow())
-            embed.set_footer(text="http://musicfamily.org/realm/FactionUpgrades/",
-                             icon_url="http://musicfamily.org/realm/Factions/picks/RealmGrinderGameRL.png")
-            embed.set_thumbnail(url=thumbnail)
-
-            # Since the first two lines always are guaranteed to be an url and name of Faction upgrade, we ignore
-            # them, and then start processing adding new fields for each line
-            for line in data[2:]:
-                newline = line.split(": ")
-                first = f'**{newline[0]}**'
-                embed.add_field(name=first, value=newline[1], inline=True)
-
-        await ctx.send(embed=embed)
-
-    @upgrade.error
-    async def upgrade_error(self, ctx, error):
-        if isinstance(error, Exception):
-            title = "Error"
-            embed = discord.Embed(title=title, description="Error")
-            return await ctx.send(embed=embed)
 
     '''
     Old code for previous stuff, archiving
